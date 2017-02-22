@@ -1,0 +1,23 @@
+{
+  "name": "duell-um-die-geld",
+  "description": "a Sails application",
+  "main": "app.js",
+  "authors": [
+    "Christian Bruckmayer"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/ChrisBr/duell-um-die-geld",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "react": "^15.4.2",
+    "jquery": "^3.1.1"
+  }
+}
