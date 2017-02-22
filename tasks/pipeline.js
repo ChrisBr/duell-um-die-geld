@@ -29,15 +29,17 @@ var jsFilesToInject = [
   'js/dependencies/sails.io.js',
 
   // React needs to be loaded before react-dom
-  'js/dependencies/react.js',
-  'js/dependencies/react-dom.js',
+  //'js/dependencies/react.js',
+  //'js/dependencies/react-dom.js',
 
   // Dependencies like jQuery, or Angular are brought in here
   'js/dependencies/**/*.js',
+  'js/webpack/*.js',
 
   // All of the rest of your client-side js files
   // will be injected here in no particular order.
-  'js/**/*.js'
+  // disabled because we use webpack
+  //'js/**/*.js'
 ];
 
 

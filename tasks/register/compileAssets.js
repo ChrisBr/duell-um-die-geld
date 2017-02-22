@@ -14,11 +14,11 @@
 module.exports = function(grunt) {
   grunt.registerTask('compileAssets', [
     'clean:dev',
-    'bower:dev',
+    //'bower:dev', disabled for now as we only use react
+    'webpack:dev',
     'jst:dev',
     'less:dev',
     'copy:dev',
     'coffee:dev',
-    'babel:dev'
   ]);
 };
