@@ -36,6 +36,7 @@
     "webpack": "^2.2.1"
   },
   "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower install",
     "debug": "node debug app.js",
     "start": "sails lift"
   },
