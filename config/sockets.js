@@ -122,10 +122,19 @@ module.exports.sockets = {
   * disconnects                                                              *
   *                                                                          *
   ***************************************************************************/
-  // afterDisconnect: function(session, socket, cb) {
-  //   // By default: do nothing.
-  //   return cb();
-  // },
+  afterDisconnect: function(session, socket, cb) {
+    // By default: do nothing.
+    if (sails._exiting === true) {
+      return cb();
+    }
+    User.destroy({socket_id: socket.id}).exec(function (err, users) {
+      if(users.length > 0){
+        User.publishDestroy(users[0].id, undefined, {});
+      }
+    });
+
+    return cb();
+  },
 
   /***************************************************************************
   *                                                                          *

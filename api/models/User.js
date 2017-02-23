@@ -19,6 +19,10 @@ module.exports = {
     answer: {
       type: 'string',
       defaultsTo: ''
+    },
+    socket_id: {
+      type: 'string',
+      defaultsTo: ''
     }
   }
 };

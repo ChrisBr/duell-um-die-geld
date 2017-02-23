@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import UserContainer from './react/userContainer'
+import GameContainer from './react/gameContainer'
 
-//import $ from '../bower_components/jquery/dist/jquery.min.js';
-//window.jQuery = window.$ = '../bower_components/jquery/dist/jquery.min.js';
+window.jQuery = window.$ = require('../bower_components/jquery/dist/jquery.min.js');
 //import bootstrapJs from '../bower_components/bootstrap/dist/js/bootstrap.min.js';
 import bootstrapStyles from '../bower_components/bootstrap/dist/css/bootstrap.min.css';
 
-ReactDOM.render(
-  <UserContainer name="Christian"/>,
-  document.getElementById('root')
-);
+
+$(function whenDomIsReady() {
+    // as soon as this file is loaded, connect automatically,
+    //var socket = io.sails.connect();
+    //window.socket = socket;
+
+    ReactDOM.render(
+      <GameContainer />,
+      document.getElementById('root')
+    );
+});
