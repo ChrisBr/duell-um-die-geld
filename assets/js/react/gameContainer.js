@@ -11,6 +11,8 @@ class GameContainer extends React.Component {
       loggedIn: false,
       userName: "",
       userId: "",
+      questionId: -1,
+      betRound: -1,
       questions: [
         {
           question: "Wieviele Mentos sind in einer Packung?",
@@ -29,8 +31,16 @@ class GameContainer extends React.Component {
   }
 
   handleLogin(message){
-    console.log("handle login: " + message.name);
     this.setState({loggedIn: true, userName: message.name, userId: message.id});
+  }
+
+  componentWillMount() {
+    var that = this;
+    io.socket.get('/game', function (message) {
+      // there is only one game generated when starting the application
+      var game = message[0];
+      that.setState({ betRound: game.betRound, questionId: game.questionId });
+    });
   }
 
   render() {
