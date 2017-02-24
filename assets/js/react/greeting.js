@@ -9,7 +9,7 @@ class Greeting extends React.Component {
   render() {
     return (
       <div>
-        <h1>Let's go { this.props.name }! Please enter your answer and bet.</h1>
+        <h1>Let's go { this.props.user.name }! Please enter your answer and bet.</h1>
       </div>
     );
   }

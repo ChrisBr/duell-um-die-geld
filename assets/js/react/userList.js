@@ -8,24 +8,25 @@ class UserList extends React.Component {
     this.renderAccountBalance = this.renderAccountBalance.bind(this);
     this.renderIndex = this.renderIndex.bind(this);
     this.renderAnswer = this.renderAnswer.bind(this);
+    this.renderBet = this.renderBet.bind(this);
   }
 
-  renderUserNames(userName){
-    if(userName === this.props.userName){
+  renderUserNames(user){
+    if(user.id === this.props.user.id){
       return <td>You</td>
     } else {
-      return <td>{ userName }</td>
+      return <td>{ user.name }</td>
     }
   }
 
-  renderAccountBalance(accountBalance){
-    return <td>{ accountBalance }</td>
+  renderAccountBalance(user){
+    return <td>{ user.account }</td>
   }
 
-  renderAnswer(userName, index){
-    if(userName === this.props.userName && this.props.userAnswer !== ""){
-      return <td>{ this.props.userAnswer }</td>
-    } else if(this.props.answers[index] === true) {
+  renderAnswer(user){
+    if(user.id === this.props.user.id && this.props.user.answer !== ""){
+      return <td>{ user.answer }</td>
+    } else if(user.answer !== "") {
       return <td>Submitted answer</td>
     } else  {
       return <td>Waiting for answer</td>
@@ -34,6 +35,10 @@ class UserList extends React.Component {
 
   renderIndex(index){
     return <td>{index + 1 }</td>
+  }
+
+  renderBet(user){
+    return <td>{user.bet}</td>
   }
 
   render() {
@@ -51,14 +56,14 @@ class UserList extends React.Component {
         </thead>
         <tbody>
           {
-            this.props.userNames.map(function(userName, index){
+            this.props.users.map(function(user, index){
               return(
                 <tr key={index} >
                   {that.renderIndex(index)}
-                  {that.renderUserNames(userName)}
-                  {that.renderAccountBalance(that.props.accountBalances[index])}
-                  <td>Waiting for bet</td>
-                  {that.renderAnswer(userName, index)}
+                  {that.renderUserNames(user)}
+                  {that.renderAccountBalance(user)}
+                  {that.renderBet(user)}
+                  {that.renderAnswer(user)}
                 </tr>
               )
             })

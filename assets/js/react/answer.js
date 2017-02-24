@@ -20,7 +20,9 @@ class Answer extends React.Component {
 
   render() {
     var html = "";
-    if(this.props.answer === ""){
+    if(this.props.users && this.props.users.length <= 1 ){
+      html = <p className="lead">Waiting for more players ...</p>
+    } else if(this.props.user.answer === "") {
       html = <form className="form-inline" onSubmit={this.handleSubmit}>
               <div className="form-group">
                 <label htmlFor="bet">What is your answer:</label>
@@ -29,9 +31,8 @@ class Answer extends React.Component {
               <button type="submit" className="btn btn-success">Set answer!</button>
             </form>
     } else {
-      html = <p className="lead">Your answer is {this.props.answer}</p>
+      html = <p className="lead">Your answer is {this.props.user.answer}</p>
     }
-
     return(
       <div className="row" id="betFormRow">
         <div className="col-md-4 col-md-offset-4" id="betFormColumn">

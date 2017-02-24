@@ -10,7 +10,7 @@ class Question extends React.Component {
       <div className="row" id="questionFormRow">
         <div className="col-md-4 col-md-offset-4" id="questionFormColumn">
           <h1>
-            {this.props.question}
+            {this.props.question.title}
           </h1>
         </div>
       </div>
