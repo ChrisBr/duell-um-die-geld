@@ -1,36 +1,56 @@
 
 import React, { Component } from 'react';
+import LoginForm from './loginForm'
+import Greeting from './greeting'
+import UserList from './userList'
 
 class UserContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { userList: [] }
-    this.getData = this.getData.bind(this);
-    this.createUsers = this.createUsers.bind(this);
+    this.state = {
+      userNames: [],
+      accountBalances: [],
+    }
+    this.getUserNames = this.getUserNames.bind(this);
   }
 
-  createUsers(users){
-    var userList = users.map(function(user) {
-      return <div key={"user-" + user.id }>{ user.name }</div>
+  getUserNames(){
+    var that = this;
+    io.socket.get('/user', function (message) {
+      var userNames = [];
+      var accountBalances = [];
+      message.map(function(obj){
+        userNames.push(obj.name);
+        accountBalances.push(obj.account);
+        return;
+      });
+      that.setState({ userNames: userNames, accountBalances: accountBalances });
     });
-    this.setState({ userList: userList })
   }
 
-  getData(){
-  fetch('http://localhost:1337/user')
-    .then((response) => response.json())
-    .then((responseJson) => { this.createUsers(responseJson) })
-    .catch((error) => { console.error(error); });
+  componentWillMount() {
+    this.getUserNames();
+    var that = this;
+    io.socket.on('user', function whenMessageRecevied(message) {
+      console.log("User subscription: " + message);
+      if(message.verb === "created" || message.verb === "destroyed"){
+        // for now we refetch all user
+        that.getUserNames();
+      }
+    });
   }
 
   render() {
-    return (
+    return(
       <div>
-        <h1>Hello, { this.props.name } </h1>
-        <button type="button" className="btn btn-success"onClick={this.getData}>Check!</button>
-        <div>{ this.state.userList }</div>
+        <div>
+          <Greeting name={this.props.userName}/>
+        </div>
+        <div>
+          <UserList userNames={this.state.userNames} accountBalances={this.state.accountBalances} />
+        </div>
       </div>
-    );
+    )
   }
 }
 

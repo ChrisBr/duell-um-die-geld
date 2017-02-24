@@ -1,12 +1,16 @@
 
 import React, { Component } from 'react';
-import Login from './login'
+import UserContainer from './userContainer'
 import Question from './question'
+import LoginContainer from './loginContainer';
 
 class GameContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      loggedIn: false,
+      userName: "",
+      userId: "",
       questions: [
         {
           question: "Wieviele Mentos sind in einer Packung?",
@@ -21,15 +25,27 @@ class GameContainer extends React.Component {
         }
       ],
     }
+    this.handleLogin = this.handleLogin.bind(this);
+  }
+
+  handleLogin(message){
+    console.log("handle login: " + message.name);
+    this.setState({loggedIn: true, userName: message.name, userId: message.id});
   }
 
   render() {
-    return(
-      <div>
-        <Login />
-        <Question question={this.state.questions[0].question} />  
-      </div>
+    if(this.state.loggedIn === false){
+      return(
+        <LoginContainer loggedIn={this.state.loggedIn} handleLogin={this.handleLogin}/>
       )
+    }else{
+      return(
+        <div>
+          <UserContainer loggedIn={this.state.loggedIn} userName={this.state.userName} />
+          <Question question={this.state.questions[0].question} />
+        </div>
+        )
+    }
   }
 }
 

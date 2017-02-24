@@ -10,15 +10,15 @@ class UserList extends React.Component {
   }
 
   renderUserNames(userName){
-    return <td key={ "td-user-" + userName } > { userName }</td>
+    return <td>{ userName }</td>
   }
 
   renderAccountBalance(accountBalance){
-    return <td key={ "td-accountBalance-" + accountBalance } > { accountBalance }</td>
+    return <td>{ accountBalance }</td>
   }
 
   renderIndex(index){
-    return <td key={ "td-index" + index }>{index + 1 }</td>
+    return <td>{index + 1 }</td>
   }
 
   render() {
@@ -36,13 +36,11 @@ class UserList extends React.Component {
         </thead>
         <tbody>
           {
-            this.props.userNames.map(function(obj, index){
-              console.log(obj);
-              console.log(index);
+            this.props.userNames.map(function(userName, index){
               return(
-                <tr>
+                <tr key={index} >
                   {that.renderIndex(index)}
-                  {that.renderUserNames(obj)}
+                  {that.renderUserNames(userName)}
                   {that.renderAccountBalance(that.props.accountBalances[index])}
                   <td>Waiting for bet</td>
                   <td>Waiting for answer</td>
