@@ -10,7 +10,8 @@ class Login extends React.Component {
     this.state = {
       name: "",
       id: "",
-      users: [],
+      userNames: [],
+      accountBalances: [],
       loggedIn: false,
     }
     this.createUser = this.createUser.bind(this);
@@ -20,6 +21,7 @@ class Login extends React.Component {
   createUser(username){
     var that = this;
     io.socket.post('/user/addUser/', { name: username }, function(message) {
+      console.log(message);
       that.setState({ id: message.id, name: message.name, loggedIn: true });
     });
 
@@ -35,12 +37,13 @@ class Login extends React.Component {
     var that = this;
     io.socket.get('/user', function (message) {
       var userNames = [];
+      var accountBalances = [];
       message.map(function(obj){
-        console.log("map: " + obj.name)
         userNames.push(obj.name);
+        accountBalances.push(obj.account);
         return;
       });
-      that.setState({ users: userNames });
+      that.setState({ userNames: userNames, accountBalances: accountBalances });
     });
   }
 
@@ -49,12 +52,8 @@ class Login extends React.Component {
     var that = this;
     io.socket.on('user', function whenMessageRecevied(message) {
       console.log("User subscription: " + message);
-      if(message.verb === "created"){
-        var users = that.state.users;
-        users.push(message.data.name);
-        that.setState({ users: users });
-      } else if(message.verb === "destroyed"){
-        // for now we fetch all users again if somebody unsubscribes ...
+      if(message.verb === "created" || message.verb === "destroyed"){
+        // for now we refetch all user
         that.getUserNames();
       }
     });
@@ -68,7 +67,7 @@ class Login extends React.Component {
             <Greeting name={this.state.name}/>
           </div>
           <div>
-            <UserList users={this.state.users} />
+            <UserList userNames={this.state.userNames} accountBalances={this.state.accountBalances} />
           </div>
         </div>
         )
