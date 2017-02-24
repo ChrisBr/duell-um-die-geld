@@ -14,8 +14,6 @@ class LoginContainer extends React.Component {
   createUser(username){
     var that = this;
     io.socket.post('/user/addUser/', { name: username }, function(message) {
-      console.log(message);
-      // update logged in on parent gameController
       that.props.handleLogin(message);
     });
   }

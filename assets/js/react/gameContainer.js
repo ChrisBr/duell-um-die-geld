@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import UserContainer from './userContainer'
 import Question from './question'
 import LoginContainer from './loginContainer';
+import Answer from './answer';
 
 class GameContainer extends React.Component {
   constructor(props) {
@@ -15,13 +16,22 @@ class GameContainer extends React.Component {
       betRound: -1,
       question: "",
       answer: "",
+      userAnswer: "",
     }
     this.handleLogin = this.handleLogin.bind(this);
     this.fetchQuestions = this.fetchQuestions.bind(this);
+    this.handleSubmitAnswer = this.handleSubmitAnswer.bind(this);
   }
 
   handleLogin(message){
     this.setState({loggedIn: true, userName: message.name, userId: message.id});
+  }
+
+  handleSubmitAnswer(answer){
+    var that = this;
+    io.socket.put('/user/' +  this.state.userId, { answer: answer }, function (message) {
+      that.setState({ userAnswer: message.answer });
+    });
   }
 
   fetchQuestions(){
@@ -48,8 +58,9 @@ class GameContainer extends React.Component {
     }else{
       return(
         <div>
-          <UserContainer loggedIn={this.state.loggedIn} userName={this.state.userName} />
+          <UserContainer loggedIn={this.state.loggedIn} userName={this.state.userName} userAnswer={this.state.userAnswer} />
           <Question question={this.state.question}/>
+          <Answer updateAnswer={this.handleSubmitAnswer} answer={this.state.userAnswer}/>
         </div>
         )
     }

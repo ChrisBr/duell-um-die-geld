@@ -10,6 +10,7 @@ class UserContainer extends React.Component {
     this.state = {
       userNames: [],
       accountBalances: [],
+      answers: [],
     }
     this.getUserNames = this.getUserNames.bind(this);
   }
@@ -19,12 +20,14 @@ class UserContainer extends React.Component {
     io.socket.get('/user', function (message) {
       var userNames = [];
       var accountBalances = [];
+      var answers = [];
       message.map(function(obj){
         userNames.push(obj.name);
         accountBalances.push(obj.account);
+        answers.push(obj.answer !== "");
         return;
       });
-      that.setState({ userNames: userNames, accountBalances: accountBalances });
+      that.setState({ userNames: userNames, accountBalances: accountBalances, answers: answers });
     });
   }
 
@@ -32,11 +35,9 @@ class UserContainer extends React.Component {
     this.getUserNames();
     var that = this;
     io.socket.on('user', function whenMessageRecevied(message) {
-      console.log("User subscription: " + message);
-      if(message.verb === "created" || message.verb === "destroyed"){
-        // for now we refetch all user
-        that.getUserNames();
-      }
+      console.log("User subscription: " + message.verb);
+      // for now we refetch all user
+      that.getUserNames();
     });
   }
 
@@ -47,7 +48,7 @@ class UserContainer extends React.Component {
           <Greeting name={this.props.userName}/>
         </div>
         <div>
-          <UserList userNames={this.state.userNames} accountBalances={this.state.accountBalances} />
+          <UserList answers={this.state.answers} userName={this.props.userName} userAnswer={this.props.userAnswer} userNames={this.state.userNames} accountBalances={this.state.accountBalances} />
         </div>
       </div>
     )
