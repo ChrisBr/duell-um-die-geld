@@ -10,14 +10,17 @@
  */
 
 module.exports.bootstrap = function(cb) {
-
-  // destroy all users
+  // cleanup old db entries
   User.destroy({ }).exec(function (err, user) {  console.log("running initial user destroy") });
+  Question.destroy({ }).exec(function (err, question) {  console.log("running initial question destroy") });
+  Game.destroy({ }).exec(function (err, game) {  console.log("running initial game destroy") });
 
-  // destroy and recreate game
-  Game.destroy({ }).exec(function (err, user) {  console.log("running initial game destroy") });
-  Game.create({ }).exec(function (err, user) {  console.log("running initial game creation") });
-
+  Question.create({ title: "How many employees has SUSE?", answer: "500"}).exec(function (err, question) {
+    console.log("running initial question creation")
+    Game.create({ questionId: question.id }).exec(function (err, user) {
+      console.log("running initial game creation")
+    });
+  });
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
   cb();

@@ -13,25 +13,22 @@ class GameContainer extends React.Component {
       userId: "",
       questionId: -1,
       betRound: -1,
-      questions: [
-        {
-          question: "Wieviele Mentos sind in einer Packung?",
-          hints: [
-            "Damit bleibt Kevin Großkreuz eine ganze Halbzeit mit cool!",
-            "Second Hint!",
-            "Third Hint!",
-            "Fourth Hint!",
-            "Fifth Hint!",
-            ],
-            answer: "15"
-        }
-      ],
+      question: "",
+      answer: "",
     }
     this.handleLogin = this.handleLogin.bind(this);
+    this.fetchQuestions = this.fetchQuestions.bind(this);
   }
 
   handleLogin(message){
     this.setState({loggedIn: true, userName: message.name, userId: message.id});
+  }
+
+  fetchQuestions(){
+    var that = this;
+    io.socket.get("/question/" + this.state.questionId, function (message) {
+      that.setState({ question: message.title, answer: message.answer });
+    });
   }
 
   componentWillMount() {
@@ -39,7 +36,7 @@ class GameContainer extends React.Component {
     io.socket.get('/game', function (message) {
       // there is only one game generated when starting the application
       var game = message[0];
-      that.setState({ betRound: game.betRound, questionId: game.questionId });
+      that.setState({ betRound: game.betRound, questionId: game.questionId }, that.fetchQuestions);
     });
   }
 
@@ -52,7 +49,7 @@ class GameContainer extends React.Component {
       return(
         <div>
           <UserContainer loggedIn={this.state.loggedIn} userName={this.state.userName} />
-          <Question question={this.state.questions[0].question} />
+          <Question question={this.state.question}/>
         </div>
         )
     }
